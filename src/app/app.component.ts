@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { of } from 'rxjs';
-import { bufferCount } from 'rxjs/operators';
+import { interval } from 'rxjs';
+import { bufferTime, take } from 'rxjs/operators';
 
 
 @Component({
@@ -11,40 +11,28 @@ import { bufferCount } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // bufferCount
-  // add value into buffer until full
-  // then emit the buffer
+  // bufferTime
+  // determine the lifetime of a buffer
+  // emit the created buffer after a given period
 
   constructor () {
-    // #region example 1
-    console.log ('# emit buffer of 2 values or when complete');
-    of(1,2,3)
-      .pipe(bufferCount(2))
+    console.log ('# create a new buffer every 1 seconds');
+    console.log('# and emit it after 2 second');
+    interval(1000)
+      .pipe(
+        take(6),
+        bufferTime(2000, 1000)
+      )
       .subscribe(sequence => {
           console.log(sequence);
       });
+      
     // Output:
-    // [1,2]
-    // [3]
-    // #endregion
-
-
-
-    // #region example 2
-    console.log ();
-    console.log ('# emit buffer of 2 values');
-    console.log ('# start a new buffer when a new value emitted');
-    console.log ('# multiple buffers can coexist!');
-    
-    of(1,2,3)
-      .pipe(bufferCount(2,1))
-      .subscribe(sequence => {
-        console.log(sequence)
-      });
-
-    // Output:
-    // [1,2]
-    // [2,3]
-    // [3]
-    //#endregion
+    // [0]
+    // [0, 1, 2]
+    // [1, 2, 3]
+    // [2, 3, 4]
+    // [3, 4, 5]
+    // [4, 5]
+    // [5]
 }}
