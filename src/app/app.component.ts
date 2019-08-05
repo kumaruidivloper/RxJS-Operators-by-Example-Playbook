@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { interval } from 'rxjs';
-import { take, tap, bufferWhen } from 'rxjs/operators';
+import { window, take, switchMap, toArray } from 'rxjs/operators';
 
 
 @Component({
@@ -11,26 +11,20 @@ import { take, tap, bufferWhen } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // bufferWhen
+  // Window
   
   constructor () {
-    // determine the closing point of a buffer
-    console.log('# vary buffer clearing based on value from interval');
-    let x = 0;
-    interval(500)
-      .pipe(
-          take(10),
-          tap(i => (x = i)),
-          bufferWhen(() => {
-              //vary buffer closing:
-              if (x < 5) {
-                return interval(1000);
-              }
-              return interval(500);
-          })
-      )
-      .subscribe(values => {
-        console.log(values);
-      });
-}
+    console.log('# emit the buffer after 1000 ms');
+    interval(100)
+        .pipe(
+            window(interval(1000)),
+            take(3), // <-- just to limit the life of the source Observable
+            // switchMap(w => w.pipe(toArry()))
+
+            switchMap(w => w.pipe(toArray()))
+    )
+    .subscribe(d => {
+        console.log(d);
+    });
+  }
 }
