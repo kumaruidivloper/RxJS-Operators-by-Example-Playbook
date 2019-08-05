@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { interval } from 'rxjs';
-import { window, take, switchMap, toArray } from 'rxjs/operators';
+import { timer } from 'rxjs';
+import { windowCount, take, switchMap, toArray } from 'rxjs/operators';
 
 
 @Component({
@@ -11,20 +11,40 @@ import { window, take, switchMap, toArray } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // Window
+  // windowCount
+
   
   constructor () {
-    console.log('# emit the buffer after 1000 ms');
-    interval(100)
-        .pipe(
-            window(interval(1000)),
-            take(3), // <-- just to limit the life of the source Observable
-            // switchMap(w => w.pipe(toArry()))
+    //# Region example 1  
+    const source = timer(0, 100).pipe(take(9));
+    console.log('# buffer 2 times');
+    source
+      .pipe(
+          windowCount(2),
+          switchMap(w => w.pipe(toArray()))
+      )
+      .subscribe(v => console.log(v));
 
+      // outPut:
+      // [0, 1]
+      // [2, 3]
+      // [4, 5]
+      // [6, 7]
+      // [8]
+
+      // # Endregion
+
+    // #region example 2
+    setTimeout(() => {
+      console.log('# buffer 2 items then skip 1 item');
+      source
+          .pipe(
+            windowCount(2, 3), // cut after 3 values but add only 2 values
             switchMap(w => w.pipe(toArray()))
-    )
-    .subscribe(d => {
-        console.log(d);
-    });
-  }
+          )
+          .subscribe(v => console.log(v));
+    }, 100);
+
+    // # Endregion2
+  }  
 }

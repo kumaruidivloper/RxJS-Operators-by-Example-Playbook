@@ -1,6 +1,6 @@
-# window
+# windowCount
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.4.
 
-## Window
-![005-window](https://user-images.githubusercontent.com/30646609/62455056-2deb9480-b793-11e9-95b8-cc2100b5aea8.JPG)
+## WindowCount
+![006-windowCount](https://user-images.githubusercontent.com/30646609/62462129-37c9c380-b7a4-11e9-855a-4385f405b642.JPG)
