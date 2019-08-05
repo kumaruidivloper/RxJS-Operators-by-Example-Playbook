@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { interval } from 'rxjs';
-import { bufferTime, take } from 'rxjs/operators';
+import { take, tap, bufferToggle } from 'rxjs/operators';
 
 
 @Component({
@@ -11,28 +11,25 @@ import { bufferTime, take } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // bufferTime
-  // determine the lifetime of a buffer
-  // emit the created buffer after a given period
-
+  // bufferToggle
+  
   constructor () {
-    console.log ('# create a new buffer every 1 seconds');
-    console.log('# and emit it after 2 second');
-    interval(1000)
+    // define our open/close signals
+    const opening = interval(400).pipe(tap(() => console.log('open')));
+    const closing = () => interval(300).pipe(tap(() => console.log('close')));
+
+    //each buffer closes 300 ms after opening
+    interval(100)
       .pipe(
-        take(6),
-        bufferTime(2000, 1000)
+          tap(x => console.log(x)),
+          bufferToggle(opening, closing),
+          take(3) // <-- just to limit the life of the source Observable
       )
       .subscribe(sequence => {
-          console.log(sequence);
+
+        console.log(sequence);
       });
-      
-    // Output:
-    // [0]
-    // [0, 1, 2]
-    // [1, 2, 3]
-    // [2, 3, 4]
-    // [3, 4, 5]
-    // [4, 5]
-    // [5]
-}}
+  }
+
+  // Check the Output in console
+}
