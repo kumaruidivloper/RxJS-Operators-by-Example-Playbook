@@ -1,27 +1,23 @@
-# RxJSOperatorsByExamplePlaybook
+# RxJS-Operators-By-Example-Playbook
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.4.
 
-## Development server
+## Reactive Programming
+![001_Reactive_Programming](https://user-images.githubusercontent.com/30646609/62446740-2de29900-b781-11e9-86e8-62e46fe855ed.JPG)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Reactive Programming Operators
+![002_Reactive_Programming_Operators](https://user-images.githubusercontent.com/30646609/62446741-2e7b2f80-b781-11e9-834d-aea4e0d5f2f7.JPG)
 
-## Code scaffolding
+## Types Of Observables
+![003_Types_Of_Observables](https://user-images.githubusercontent.com/30646609/62446742-2e7b2f80-b781-11e9-958d-935a6dcb8623.JPG)
+![003_Types_Of_Observables-2](https://user-images.githubusercontent.com/30646609/62446743-2e7b2f80-b781-11e9-87ab-450c075db3b3.JPG)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Marble Diagrams
+![004-Marble-Diagrams](https://user-images.githubusercontent.com/30646609/62446744-2f13c600-b781-11e9-99de-6b9d4ee78a40.JPG)
 
-## Build
+## Operators List
+![005-Operators-List](https://user-images.githubusercontent.com/30646609/62446745-2f13c600-b781-11e9-93e4-33c576ab2857.JPG)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Syntax
+![006-Syntax](https://user-images.githubusercontent.com/30646609/62446746-2f13c600-b781-11e9-815e-cdcde80ab477.JPG)
+![006-Syntax-2](https://user-images.githubusercontent.com/30646609/62446748-2f13c600-b781-11e9-9f35-4e7687db1219.JPG)
