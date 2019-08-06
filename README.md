@@ -1,6 +1,6 @@
-# take
+# takeLast
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.4.
 
-## take
-![006-take](https://user-images.githubusercontent.com/30646609/62557932-9ae75300-b895-11e9-86a2-5b948d635efe.JPG)
+## takeLast
+![007-takeLast](https://user-images.githubusercontent.com/30646609/62559562-d899ab00-b898-11e9-8804-880e810e9918.JPG)
