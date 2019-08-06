@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { timer } from 'rxjs';
-import { windowToggle, take, switchMap, toArray } from 'rxjs/operators';
+import { windowWhen, take, mergeAll, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -11,26 +11,24 @@ import { windowToggle, take, switchMap, toArray } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // windowToggle
-  // open a new buffers whenever recevied an operating signal
-  // after opened, the buffer stays untill a closing signal is received
-  // then, send the buffer as a stream
+  // windowWhen
+  //    buffer values
+  //    on receiving signals from the notifier
+  //      send the buffer as an observable
+  //    when the source complete
+  //      send the last buffer as an observable
   
   constructor () {
-    console.log('# open a new buffer every 500ms');
-    console.log('# close the buffer 200ms after opening');
-    console.log('# hence, ignore those come between 200ms and 500ms');
-    const openings = timer(0, 500);
-    const closing = () => timer(200);
+    const source = timer(0,100).pipe(take(9));
+    const notifier = () => timer(200);
 
-    timer(0,100)
+    console.log('# emit buffer after 200 ms')
+    source
         .pipe(
-          take(36),
-          windowToggle(openings, closing),
-          switchMap(s => s.pipe(toArray()))
+            windowWhen(notifier),
+            tap(() => console.log('new buffer')),
+            mergeAll()
         )
-        .subscribe(sequence => {
-            console.log(sequence);
-        });
+        .subscribe(v => console.log(v));
   }  
 }
