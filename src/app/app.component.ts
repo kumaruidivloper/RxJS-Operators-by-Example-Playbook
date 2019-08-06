@@ -25,12 +25,11 @@ export class AppComponent {
         setTimeout(() => observer.complete(), 600); // emitted 300 ms later
     });
 
-    console.log('# It takes less than 350 ms from A --> B, B --> C, and C --> complete');
-    source.pipe(timeout(350)).subscribe(d => console.log(d), null, () => console.log('complete'));
+    console.log('# It takes more than 150 ms from B --> C');
+    source.pipe(timeout(150)).subscribe(d => console.log(d), e => console.log('Timeout has occured'));
     // OutPut
     // A
     // B
-    // C
-    // Complete
+    // Timeout has occured
   }
 }
