@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { of, interval } from 'rxjs';
-import { skipLast } from 'rxjs/operators';
+import { timer } from 'rxjs';
+import { skipUntil, take } from 'rxjs/operators';
 
 
 @Component({
@@ -11,27 +11,22 @@ import { skipLast } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // skipLast
-  // ignore the last n values
+  // skipUntil
+  // skip the value until the notifier sends signal
   
   constructor () {
-    console.log('# skip the last 2 values');
-    of(1, 2, 3)
-        .pipe(skipLast(2))
-        .subscribe(val => console.log(val));
+    console.log('# ignore values before the notifier sends the signal at 3s');
+    timer(0, 1000)
+      .pipe(
+        take(6),
+        skipUntil(timer(3000))
+      )
+      .subscribe(val => console.log(val));
 
-    // Output
-    // 1
-
-    setTimeout(() => {
-      // ^^^ delay untill previous example complete
-      console.log('# Observable must complete');
-      interval(100)
-          .pipe(skipLast(1))
-          .subscribe(val => console.log(val));
-
-    }, 3000);
-    // Output
-    // (noting skipped - runs forever)
+      // Output:
+      // ignore values before the notifier sends the signal at 3s
+      // 3
+      // 4
+      // 5
   }
 }
