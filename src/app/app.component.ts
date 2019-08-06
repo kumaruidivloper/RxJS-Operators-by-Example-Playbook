@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { timer } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 
 
 @Component({
@@ -11,23 +11,17 @@ import { takeUntil } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // takeUntil
-  // take the value until the notifier sends signal
+  // takeWhile
+  // take the value while the condition held true
+  // once the condition becomes false, emit complete event
   
   constructor () {
-    console.log('# take the values until the notifier sends the signal at 300ms')
-    timer(0, 100).pipe(
-      takeUntil(timer(300))
-    ).subscribe(
-        val => console.log(val),
-        null,
-        () => console.log('complete')
-    );
-    
-    // Output:
-    // 0
+    console.log('# take while condition is true');
+    of(1, 2, 3, 1)
+        .pipe(takeWhile(val => val < 3))
+        .subscribe(val => console.log(val));
+    // Output
     // 1
     // 2
-    // complete
   }
 }
