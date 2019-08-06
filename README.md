@@ -1,13 +1,12 @@
-# Error-Handling
+# onErrorResumeNext
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.4.
 
-## Error Handling-Operators
-![001-Error Handling-Operators](https://user-images.githubusercontent.com/30646609/62518887-24703400-b848-11e9-89af-16203614e9a6.JPG)
+## onErrorResumeNext
+![005-onErrorResumeNext](https://user-images.githubusercontent.com/30646609/62521800-f68dee00-b84d-11e9-964d-45f1cf5a4c1d.JPG)
+![005-onErrorResumeNext-appropriate-name-might-be-onCloseSwitchTo-2](https://user-images.githubusercontent.com/30646609/62521805-f7268480-b84d-11e9-88c8-560197b5591f.JPG)
+![005-onErrorResumeNext-appropriate-name-might-be-onCloseSwitchTo-3](https://user-images.githubusercontent.com/30646609/62521806-f7268480-b84d-11e9-91f4-f9a9968fb9b8.JPG)
+![005-onErrorResumeNext-3](https://user-images.githubusercontent.com/30646609/62521802-f68dee00-b84d-11e9-8bad-d868500863c5.JPG)
 
-## Use Cases Error Handling
-![002-Use-Cases-Error-Handling](https://user-images.githubusercontent.com/30646609/62518889-2508ca80-b848-11e9-8ac7-cee313f672b2.JPG)
 
-## catchError
-![003-catchError](https://user-images.githubusercontent.com/30646609/62518891-25a16100-b848-11e9-9ca7-dde90d2c7861.JPG)
 

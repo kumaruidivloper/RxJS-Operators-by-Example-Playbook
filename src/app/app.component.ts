@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { throwError, of } from 'rxjs';
-import { catchError, map, retry } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { onErrorResumeNext, map } from 'rxjs/operators';
 
 
 @Component({
@@ -11,59 +11,29 @@ import { catchError, map, retry } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // catchError
-  // prevent the error from stopping the stream
-  // replace the error with a new source
+  // onErrorResumeNext
+  // - on error, skip the current stream
+  // - use a new stream as a replacement
   
   constructor () {
-    console.log('# catch then rethrow the error');
-    throwError('error')
+    console.log('# on error, use another stream');
+    const source = of('feed1', 'feed2', 'feed3');
+    const backup = of(
+      'handle error',
+      'but dont complete original',
+      'and dont get any info about thrown error',
+      'Oh, **also called on COMPLETE!**'
+    );
+    source
         .pipe(
-            catchError(err => {
-              console.log(`caught an error: ${err}`);
-              return throwError(`rethrown: ${err}`);
-            }),
-            catchError(err => {
-              console.log(err);
-              return of(undefined);
-            })
+          map(feed => {
+              if (feed === 'feed2') {
+                throw new Error(`oops - but we'll never see this!`)
+              }
+              return feed;
+          }),
+          onErrorResumeNext(backup)
         )
-        .subscribe(
-            d => {
-                if (d) {
-                    console.log(d);
-                }
-            },
-            err => console.log('oops'),
-            () => console.log('complete')
-        );
-
-      // Output:
-      // caught an error: error
-      // rethrown: error!
-      // complete
-
-
-      console.log('\r\n*****************************\r\n');
-      console.log('# catch something unexpected');
-      of('a', 1)
-            .pipe(
-              map(v => v.toUpperCase()),
-              catchError(err => {
-                return of(undefined);
-              })
-            )
-            .subscribe(
-              d => {
-                if (d) {
-                  console.log(d);
-                }
-              },
-              err => console.log('oops'),
-              () => console.log('complete')
-            );
-        // OutPut
-        // A
-        // complete
+        .subscribe(v => console.log(v))
   }  
 }
