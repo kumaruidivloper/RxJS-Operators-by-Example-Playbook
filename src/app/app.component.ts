@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { of } from 'rxjs';
-import { onErrorResumeNext, map } from 'rxjs/operators';
+import { retry, map } from 'rxjs/operators';
 
 
 @Component({
@@ -11,29 +11,22 @@ import { onErrorResumeNext, map } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // onErrorResumeNext
-  // - on error, skip the current stream
-  // - use a new stream as a replacement
+  // retry
+  // resubscribe on error
   
   constructor () {
-    console.log('# on error, use another stream');
-    const source = of('feed1', 'feed2', 'feed3');
-    const backup = of(
-      'handle error',
-      'but dont complete original',
-      'and dont get any info about thrown error',
-      'Oh, **also called on COMPLETE!**'
-    );
-    source
+    console.log('# retry two times');
+    of('a', 1)
         .pipe(
-          map(feed => {
-              if (feed === 'feed2') {
-                throw new Error(`oops - but we'll never see this!`)
-              }
-              return feed;
-          }),
-          onErrorResumeNext(backup)
+            map(x => x.toUpperCase()),
+            retry(2)
         )
-        .subscribe(v => console.log(v))
+        .subscribe(x => console.log(x), e => console.log('error:', e.message));
   }  
+
+  // OutPut
+  // A    <-- original attempt
+  // A    <-- retry #1
+  // A    <-- retry #2
+  // error: x.toUpperCase is not a function
 }
