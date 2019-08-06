@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { observable, Observable } from 'rxjs';
-import { timeout } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { timeoutWith } from 'rxjs/operators';
 
 
 @Component({
@@ -11,26 +11,27 @@ import { timeout } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // timeout
-  // The timeout is a number:
-  //    Use it as a period in milliseconds
-  //    The source must emit next or complete within the period
-  //    Otherwise, a timeout error occurs
+  // timeoutWith
+  // then, replace the source with a new source
   
   constructor () {
+    const fallback = of('a', 'b', 'c');
     const source = Observable.create(observer => {
         observer.next('A');
         setTimeout(() => observer.next('B'), 100); // emitted at 100 ms
         setTimeout(() => observer.next('C'), 300); // emitted 200 ms later
         setTimeout(() => observer.complete(), 600); // emitted 300 ms later
     });
-    const timeoutAt = new Date(Date.now() + 500); //date is 500 ms from now
-    console.log('# Set the date at which the source should compete');
-    source.pipe(timeout(timeoutAt)).subscribe(d => console.log(d), e => console.log('Timeout has occured'));
+    
+    console.log('# Timeout occur from B --> C');
+    console.log('# So C is ignored, and a fallback source is emitted')
+    source.pipe(timeoutWith(150, fallback)).subscribe(d => console.log(d), null)
     // OutPut
     // A
     // B
-    // C
-    // Timeout has occured
+    // a
+    // b
+    // c
+    // complete
   }
 }
