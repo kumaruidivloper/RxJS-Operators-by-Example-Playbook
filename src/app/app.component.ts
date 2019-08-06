@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { timer } from 'rxjs';
-import { skipUntil, take } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 
 
 @Component({
@@ -11,22 +11,23 @@ import { skipUntil, take } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // skipUntil
-  // skip the value until the notifier sends signal
+  // skipWhile
+  // skip the value while the condition held true
+  // once the condition becomes false, emit the coming values as
+  // normal
   
   constructor () {
-    console.log('# ignore values before the notifier sends the signal at 3s');
-    timer(0, 1000)
-      .pipe(
-        take(6),
-        skipUntil(timer(3000))
-      )
-      .subscribe(val => console.log(val));
+    console.log('# skip while the condition is true');
+    of(1, 2, 3, 1, 2, 3, 4)
+       //  ^ condition false
+       .pipe(skipWhile(val => val < 3))
+       .subscribe(val => console.log(val));
 
-      // Output:
-      // ignore values before the notifier sends the signal at 3s
-      // 3
-      // 4
-      // 5
+    // Output
+    // 3
+    // 1
+    // 2
+    // 3
+    // 4
   }
 }
