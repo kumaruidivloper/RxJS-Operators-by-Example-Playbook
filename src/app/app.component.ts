@@ -24,12 +24,13 @@ export class AppComponent {
         setTimeout(() => observer.next('C'), 300); // emitted 200 ms later
         setTimeout(() => observer.complete(), 600); // emitted 300 ms later
     });
-
-    console.log('# It takes more than 150 ms from B --> C');
-    source.pipe(timeout(150)).subscribe(d => console.log(d), e => console.log('Timeout has occured'));
+    const timeoutAt = new Date(Date.now() + 500); //date is 500 ms from now
+    console.log('# Set the date at which the source should compete');
+    source.pipe(timeout(timeoutAt)).subscribe(d => console.log(d), e => console.log('Timeout has occured'));
     // OutPut
     // A
     // B
+    // C
     // Timeout has occured
   }
 }
