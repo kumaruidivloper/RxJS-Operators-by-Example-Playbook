@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { interval } from 'rxjs';
-import { retryWhen, map, scan, takeWhile, tap, retry } from 'rxjs/operators';
+import { observable, Observable } from 'rxjs';
+import { timeout } from 'rxjs/operators';
 
 
 @Component({
@@ -11,54 +11,26 @@ import { retryWhen, map, scan, takeWhile, tap, retry } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // retryWhen
+  // timeout
+  // The timeout is a number:
+  //    Use it as a period in milliseconds
+  //    The source must emit next or complete within the period
+  //    Otherwise, a timeout error occurs
   
   constructor () {
-    let swallowError = true;
-    interval(200)
-        .pipe(
-            map(x => {
-              console.log('attempting:' + x);
-              if(x=== 1 ) {
-                  throw 'error processing:' + x;
-              }
-              return x;
-            }),
-            retryWhen(errors => {
-                if (swallowError) {
-                  return errors.pipe(
-                    tap(err => console.log(err)),
-                    scan(acc => acc + 1, 0),
-                    tap(retryCount => {
-                      if(retryCount === 2) {
-                          console.log('Swallowing error and completing');
-                      } else {
-                          console.log('Retrying whole source - retry #' + retryCount)
-                      }
-                      return retryCount;
-                    }),
-                    takeWhile(errCount => errCount < 2)
-                  );
-                } else {
-                  return errors.pipe(
-                      tap(err => console.log(err)),
-                      scan(acc => acc + 1, 0),
-                      tap(retryCount => {
-                          if (retryCount === 2) {
-                              console.log('Failing');
-                              throw 'oops';
-                          } else {
-                              console.log('Retrying whole source - retry #' + retryCount)
-                          }
-                      })
-                  );
-                }
-            })
-        )
-        .subscribe(
-              x => console.log('successfully processed:' + x),
-              err => console.log('**********error:' + err),
-              () => console.log('completed successfully')
-        );
+    const source = Observable.create(observer => {
+        observer.next('A');
+        setTimeout(() => observer.next('B'), 100); // emitted at 100 ms
+        setTimeout(() => observer.next('C'), 300); // emitted 200 ms later
+        setTimeout(() => observer.complete(), 600); // emitted 300 ms later
+    });
+
+    console.log('# It takes less than 350 ms from A --> B, B --> C, and C --> complete');
+    source.pipe(timeout(350)).subscribe(d => console.log(d), null, () => console.log('complete'));
+    // OutPut
+    // A
+    // B
+    // C
+    // Complete
   }
 }
