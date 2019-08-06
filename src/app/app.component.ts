@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { of } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { timer } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 
 @Component({
@@ -11,23 +11,26 @@ import { skipWhile } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // skipWhile
-  // skip the value while the condition held true
-  // once the condition becomes false, emit the coming values as
-  // normal
+  // take
+  // the first n values and complete
   
   constructor () {
-    console.log('# skip while the condition is true');
-    of(1, 2, 3, 1, 2, 3, 4)
-       //  ^ condition false
-       .pipe(skipWhile(val => val < 3))
-       .subscribe(val => console.log(val));
+    const source = timer(0, 100);
+    console.log('# take the first 5 values');
+    source.pipe(
+          take(5)
+    ).subscribe(
+        d => console.log(d),
+        null,
+        () => console.log('complete')
+    );
 
     // Output
-    // 3
+    // 0
     // 1
     // 2
     // 3
     // 4
+    // complete
   }
 }
