@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { timer } from 'rxjs';
-import { windowWhen, take, mergeAll, tap } from 'rxjs/operators';
+import { throwError, of } from 'rxjs';
+import { catchError, map, retry } from 'rxjs/operators';
 
 
 @Component({
@@ -11,24 +11,59 @@ import { windowWhen, take, mergeAll, tap } from 'rxjs/operators';
 export class AppComponent {
   title = 'RxJS-Operators-by-Example-Playbook';
 
-  // windowWhen
-  //    buffer values
-  //    on receiving signals from the notifier
-  //      send the buffer as an observable
-  //    when the source complete
-  //      send the last buffer as an observable
+  // catchError
+  // prevent the error from stopping the stream
+  // replace the error with a new source
   
   constructor () {
-    const source = timer(0,100).pipe(take(9));
-    const notifier = () => timer(200);
-
-    console.log('# emit buffer after 200 ms')
-    source
+    console.log('# catch then rethrow the error');
+    throwError('error')
         .pipe(
-            windowWhen(notifier),
-            tap(() => console.log('new buffer')),
-            mergeAll()
+            catchError(err => {
+              console.log(`caught an error: ${err}`);
+              return throwError(`rethrown: ${err}`);
+            }),
+            catchError(err => {
+              console.log(err);
+              return of(undefined);
+            })
         )
-        .subscribe(v => console.log(v));
+        .subscribe(
+            d => {
+                if (d) {
+                    console.log(d);
+                }
+            },
+            err => console.log('oops'),
+            () => console.log('complete')
+        );
+
+      // Output:
+      // caught an error: error
+      // rethrown: error!
+      // complete
+
+
+      console.log('\r\n*****************************\r\n');
+      console.log('# catch something unexpected');
+      of('a', 1)
+            .pipe(
+              map(v => v.toUpperCase()),
+              catchError(err => {
+                return of(undefined);
+              })
+            )
+            .subscribe(
+              d => {
+                if (d) {
+                  console.log(d);
+                }
+              },
+              err => console.log('oops'),
+              () => console.log('complete')
+            );
+        // OutPut
+        // A
+        // complete
   }  
 }
